@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+تیکت‌های من
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="mb-3">ایجاد تیکت جدید</h3>
+            <form method="post" action="{% url 'ticket' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="title" class="form-label">عنوان:</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">توضیحات:</label>
+                    <textarea id="description" name="description" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">ارسال</button>
+            </form>
+        </div>
+        <div class="card-body container">
+            <h3>تیکت‌های من</h3>
+            <ul class="list-group mt-3">
+                {% for ticket in tickets %}
+                <li class="list-group-item">
+                    <h5>{{ ticket.title }}</h5>
+                    <p>{{ ticket.description }}</p>
+                    {% if ticket.status_response %}
+                    <span class="badge bg-success">پاسخ داده شده</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">پاسخ داده نشده</span>
+                    {% endif %}
+                </li>
+                {% empty %}
+                <li class="list-group-item">تیکتی یافت نشد.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

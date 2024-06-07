@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}
+سفارش‌ها
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-dismissible alert-{% if message.tags == 'success' %}success{% else %}danger{% endif %} fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-center align-items-center">
+            <div>
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="currencyDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    انتخاب ارز
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
+                    {% for currency in currencies %}
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="#" onclick="selectCurrency('{{ currency.id }}', '{{ currency.symbol }}', '{{ currency.name }}', {{ currency.price }}, '{{ currency.logo_url }}')">
+                            <img src="{{ currency.logo_url }}" alt="{{ currency.name }}" width="24" height="24" class="me-2">
+                            {{ currency.symbol }} - {{ currency.name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <h4 class="ms-4">
+                <span id="price">{{ currencies.0.price }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
+                      <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
+                </svg>
+            </h4>
+        </div>
+        <div class="card-body">
+            <form id="orderForm" class="text-center" method="post">
+                <input hidden="hidden" name="symbol" id="inputSymbol" value="{{ currencies.0.symbol }}">
+                {% csrf_token %}
+                <input type="hidden" name="currency_id" id="currency_id">
+                <div class="mb-5">
+                    <div id="orderType" class="btn-group w-50" role="group">
+                        <input type="radio" class="btn-check" name="order_type" id="buy" value="buy" checked autocomplete="off">
+                        <label class="btn btn-outline-success" for="buy">خرید</label>
+
+                        <input type="radio" class="btn-check" name="order_type" id="sell" value="sell" autocomplete="off">
+                        <label class="btn btn-outline-danger" for="sell">فروش</label>
+                    </div>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <div class="input-group w-50">
+                        <input type="number" class="form-control" id="amount" name="amount" min="0" step="0.000001" required placeholder="مقدار ارز...">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <span id="usdValue">0</span> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
+                      <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73z"/>
+                    </svg>
+                </div>
+                <button type="submit" class="btn btn-success w-25" id="submitOrder">خرید</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const amountInput = document.getElementById('amount');
+    const usdValueElement = document.getElementById('usdValue');
+    const submitOrderButton = document.getElementById('submitOrder');
+    const rangeInput = document.getElementById('range');
+    const priceElement = document.getElementById('price');
+    const inputSymbol = document.getElementById('inputSymbol')
+
+    let currentPrice = {{ currencies.0.price }};
+    let currentSymbol = '{{ currencies.0.symbol }}';
+    let currentLogo = '{{ currencies.0.logo_url }}';
+    let currentName = '{{ currencies.0.name }}';
+
+    function selectCurrency(id, symbol, name, price, logoUrl) {
+        document.getElementById('currencyDropdown').innerHTML = `
+            <img src="${logoUrl}" alt="${name}" width="24" height="24" class="me-2">
+            ${symbol} - ${name}
+        `;
+        currentPrice = price;
+        currentSymbol = symbol;
+        updateValues();
+    }
+
+    function updateValues() {
+        const amount = parseFloat(amountInput.value) || 0;
+        const usdValue = amount * currentPrice;
+        usdValueElement.textContent = usdValue.toFixed(2);
+        inputSymbol.value = currentSymbol;
+        priceElement.innerText = currentPrice;
+    }
+
+    amountInput.addEventListener('input', updateValues);
+
+    document.querySelectorAll('input[name="order_type"]').forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.value === 'buy') {
+                submitOrderButton.textContent = 'خرید';
+                submitOrderButton.classList.remove('btn-danger');
+                submitOrderButton.classList.add('btn-success');
+            } else {
+                submitOrderButton.textContent = 'فروش';
+                submitOrderButton.classList.remove('btn-success');
+                submitOrderButton.classList.add('btn-danger');
+            }
+        });
+    });
+
+    selectCurrency(0, currentSymbol, currentName, currentPrice, currentLogo)
+</script>
+{% endblock %}

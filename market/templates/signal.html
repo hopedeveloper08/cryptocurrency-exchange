@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+سیگنال -{{ symbol }}
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1>سیگنال‌ برای {{ symbol }}</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <table class="table table-striped">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>اندیکاتور</th>
+                        <th>سیگنال</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider table-bordered">
+                    {% for indicator, signal in signals.items %}
+                        <tr class="text-center {% if signal.is_buy %}table-success{% elif signal.is_sell %}table-danger{% else %}table-secondary{% endif %}">
+                            <td>{{ indicator }}</td>
+                            <td class="text-center">
+                                {% if signal.is_buy %}
+                                    <span class="text-success">خرید</span>
+                                {% elif signal.is_sell %}
+                                    <span class="text-danger">فروش</span>
+                                {% else %}
+                                    <span class="text-secondary">بی طرف</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

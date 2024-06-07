@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block favicon %}
+    {{ currency_logo }}
+{% endblock %}
+
+{% block title %}
+واریز دلار
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <div class="d-flex flex-column align-items-center">
+                <img src="{{ currency_logo }}" alt="{{ currency }}" width="80" height="80" class="me-2">
+                <h1 class="mb-0">{{ currency }}</h1>
+                <div class="d-flex justify-content-center mt-2">
+                    <p class="me-3">مقدار دارایی: {{ current_amount }}$</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <form class="d-flex justify-content-center mt-2" method="post" action="{% url 'deposit' %}">
+                {% csrf_token %}
+                <input type="hidden" name="currency" value="{{ currency }}">
+                <div class="mb-3 w-50 text-center">
+                    <h4>برداشت از حساب: {{ credit_card }}</h4>
+                    <input type="number" step="0.00000001" class="form-control" id="amount" name="amount" placeholder="مقدار واریزی..." required>
+                    <button type="submit" class="btn btn-primary mt-3">واریز</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

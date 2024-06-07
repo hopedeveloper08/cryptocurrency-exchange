@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+احراز هویت
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>احراز هویت</h1>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'verify' %}">
+                        {% csrf_token %}
+                        <div class="mb-5 mt-2">
+                            <label for="bank_account" class="form-label">شماره حساب بانکی</label>
+                            <input type="text" class="form-control" id="bank_account" name="credit_card" placeholder="شماره حساب..." required>
+                        </div>
+                        <div class="text-center w-100">
+                            <button type="submit" class="btn btn-warning w-50">احراز هویت</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

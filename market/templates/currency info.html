@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block favicon %}
+    {{ currency_data.logo }}
+{% endblock %}
+
+{% block title %}
+{{ currency_data.name }} - {{ currency_data.symbol }}
+{% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <div class="d-flex justify-content-center align-items-center flex-column">
+                <img src="{{ currency_data.logo }}" alt="{{ currency_data.name }} logo" width="80" height="80" class="mb-2">
+                <h1 class="mb-0">{{ currency_data.name }} ({{ currency_data.symbol }})</h1>
+            </div>
+        </div>
+        <div class="card-body text-center">
+            <h4 class="card-title">قیمت فعلی: <span>{{ currency_data.price }}</span></h4>
+            <h4 class="card-subtitle mb-5 text-muted">
+                تغییرات امروز: <span class="{% if currency_data.change_today >= 0 %}text-success{% else %}text-danger{% endif %}">{{ currency_data.change_today|floatformat:2 }}%</span>
+            </h4>
+            <div class="row mt-5 mb-4">
+                <div class="col-6 text-center mb-3">
+                    <a href="{% url 'signal' currency_data.symbol %}" class="text-white text-decoration-none btn btn-primary btn-lg w-100">مشاهده سیگنال‌ها برای تحلیل دقیق‌تر</a>
+                </div>
+                <div class="col-6 text-center mb-3">
+                    <a href="{% url 'chart' currency_data.symbol %}" class="text-white text-decoration-none btn btn-primary btn-lg w-100">مشاهده نمودار قیمت برای بررسی تاریخچه</a>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">توضیحات:</h5>
+                            <p class="card-text">{{ currency_data.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">بالاترین قیمت روز</h5>
+                            <p class="card-text">{{ currency_data.dayHigh }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">پایین‌ترین قیمت روز</h5>
+                            <p class="card-text">{{ currency_data.dayLow }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">حجم معاملات</h5>
+                            <p class="card-text">{{ currency_data.volume }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">قیمت باز</h5>
+                            <p class="card-text">{{ currency_data.open }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">قیمت بسته‌شدن قبلی</h5>
+                            <p class="card-text">{{ currency_data.previousClose }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">ارزش بازار</h5>
+                            <p class="card-text">{{ currency_data.marketCap }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">لینک کوین مارکت کپ</h5>
+                            <p class="card-text"><a href="{{ currency_data.coinMarketCapLink }}" target="_blank">{{ currency_data.coinMarketCapLink }}</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
