@@ -48,7 +48,12 @@ The project has been developed in a bachelor's degree in "System Analysis and De
 ```bash
   python3 -m pip install -r requirements.txt
 ```
+#### database
+```bash
+  python3 manage.py makemigrations
+  python3 manage.py migrate
+```
 #### server execution
 ```bash
-  python3 app.py
+  python3 manage.py startapp
 ```
