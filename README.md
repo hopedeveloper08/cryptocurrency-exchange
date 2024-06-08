@@ -31,7 +31,7 @@ The project has been developed in a bachelor's degree in "System Analysis and De
 ### trade page
 <img src="app_image/trade.png"/>
 
-### withdraw page
+### deposit and withdraw page
 <img src="app_image/withdraw.png"/>
 
 
@@ -50,10 +50,9 @@ The project has been developed in a bachelor's degree in "System Analysis and De
 ```
 #### database
 ```bash
-  python3 manage.py makemigrations
   python3 manage.py migrate
 ```
 #### server execution
 ```bash
-  python3 manage.py startapp
+  python3 manage.py runserver
 ```
