@@ -38,21 +38,21 @@ The project has been developed in a bachelor's degree in "System Analysis and De
 # Setup and Installation
 #### Creating virtual environments
 ```bash
-  python3 -m virtualenv ".venv"
+  python -m virtualenv ".venv"
 ```
 #### Activate virtual environments
 ```bash
-  source .venv/bin/activate  
+  .\venv\Scripts\activate  
 ```
 #### Requirements installation 
 ```bash
-  python3 -m pip install -r requirements.txt
+  pip install -r requirements.txt
 ```
 #### database
 ```bash
-  python3 manage.py migrate
+  python manage.py migrate
 ```
 #### server execution
 ```bash
-  python3 manage.py runserver
+  python manage.py runserver
 ```
