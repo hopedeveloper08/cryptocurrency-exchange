@@ -1,4 +1,4 @@
-# crepto currency exchange
+# crغpto currency exchange
 The project has been developed in a bachelor's degree in "System Analysis and Design" and "Software Engineering" with Django and Bootstrap.
 
 
